@@ -62,7 +62,8 @@ Module.register("MMM-MQTT", {
       multiply: sub.multiply,
       divide: sub.divide,
       broadcast: sub.broadcast,
-      hidden: sub.hidden
+      hidden: sub.hidden,
+      substring: sub.substring
     };
   },
 
@@ -103,6 +104,12 @@ Module.register("MMM-MQTT", {
             value = Number(value).toFixed(sub.decimals);
           }
         }
+        
+        // Get substring if configured
+        if (sub.substring) {
+          value = value.substring(sub.substring.start, sub.substring.end);
+        }
+        
         sub.value = value;
         sub.time = payload.time;
       }
@@ -232,7 +239,7 @@ Module.register("MMM-MQTT", {
         var setValueinnerHTML = convertValue(sub);
         valueWrapper.innerHTML = setValueinnerHTML;
         valueWrapper.className =
-          "align-right medium mqtt-value " + (tooOld ? "dimmed" : "bright");
+          "align-right mqtt-value " + (tooOld ? "dimmed" : "bright");
         valueWrapper.style.color = tooOld
           ? valueWrapper.style.color
           : colors.value;
